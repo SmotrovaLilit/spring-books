@@ -1,5 +1,6 @@
 package ru.lilitweb.books.repostory;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,12 @@ class BookRepositoryJpaTest {
 
     @Autowired
     private TestEntityManager entityManager;
+    private User bookAuthor;
 
-    @Test
-    void count() {
+    @BeforeEach
+    void setUp() {
+        bookAuthor = new User("some book author");
+        entityManager.persist(bookAuthor);
     }
 
     @Test
@@ -38,7 +42,7 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         bookRepository.insert(book);
 
         Book foundedBook = entityManager.find(Book.class, book.getId());
@@ -56,13 +60,15 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         entityManager.persist(book);
+        User anotherUser = new User("some name");
+        entityManager.persist(anotherUser);
 
         book.setTitle("new title");
         book.setDescription("new description");
         book.setYear(book.getYear() + 1);
-        book.setAuthor(new User(2));
+        book.setAuthor(anotherUser);
         bookRepository.update(book);
 
         Book foundedBook = entityManager.find(Book.class, book.getId());
@@ -79,7 +85,7 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         entityManager.persist(book);
 
         Book foundedBook = bookRepository.getById(book.getId());
@@ -94,7 +100,7 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         entityManager.persist(book);
 
         List<Book> foundedBooks = bookRepository.getAll();
@@ -111,14 +117,14 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         book.setGenres(genres);
         entityManager.persist(book);
         entityManager.persist(new Book(
                 "Руслан и Людмила новая версия",
                 2019,
                 "Описание",
-                new User(2)));
+                bookAuthor));
 
         List<Book> foundedBooks = bookRepository.getAllByGenres(genres);
 
@@ -130,20 +136,23 @@ class BookRepositoryJpaTest {
 
     @Test
     void getAllByAuthorId() {
-        User author = new User(1);
         Book book = new Book(
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                author);
+                bookAuthor);
+
+        User anotherUser = new User("some name");
+        entityManager.persist(anotherUser);
+
         entityManager.persist(book);
         entityManager.persist(new Book(
                 "Руслан и Людмила новая версия",
                 2019,
                 "Описание",
-                new User(2)));
+                anotherUser));
 
-        List<Book> foundedBooks = bookRepository.getAllByAuthor(author);
+        List<Book> foundedBooks = bookRepository.getAllByAuthor(bookAuthor);
 
         Book foundedBook = foundedBooks.get(0);
         assertEquals(1, foundedBooks.size());
@@ -158,7 +167,7 @@ class BookRepositoryJpaTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                new User(1));
+                bookAuthor);
         entityManager.persist(book);
 
         bookRepository.delete(book);
