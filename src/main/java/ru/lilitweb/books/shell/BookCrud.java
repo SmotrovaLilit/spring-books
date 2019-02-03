@@ -44,12 +44,12 @@ public class BookCrud {
     @ShellMethod("List books")
     public Table bookList() {
         LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
-        headers.put("id", "ID");
-        headers.put("title", "Title");
-        headers.put("year", "Year");
-        headers.put("description", "Description");
-        headers.put("author", "Author");
-        headers.put("genres", "Genres");
+        headers.put("id", localisation.getMessage("field.book.id"));
+        headers.put("title", localisation.getMessage("field.book.title"));
+        headers.put("year", localisation.getMessage("field.book.year"));
+        headers.put("description", localisation.getMessage("field.book.description"));
+        headers.put("author", localisation.getMessage("field.book.author"));
+        headers.put("genres", localisation.getMessage("field.book.genres"));
         TableModel table = new BeanListTableModel<>(bookService.getAll(), headers);
         return new TableBuilder(table)
                 .addFullBorder(BorderStyle.fancy_light_double_dash)
