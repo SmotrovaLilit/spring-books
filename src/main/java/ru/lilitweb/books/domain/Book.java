@@ -11,8 +11,12 @@ import javax.persistence.*;
 import javax.persistence.Entity;
 
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
-public class Book implements Entity {
+@Entity
+public class Book {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NonNull
