@@ -38,7 +38,7 @@ public class BookCrud {
 
     @ShellMethod("Delete book")
     public void bookDelete(@ShellOption int id) {
-        bookService.delete(id);
+        bookService.delete(bookService.getById(id));
     }
 
     @ShellMethod("List books")

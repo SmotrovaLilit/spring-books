@@ -2,9 +2,9 @@ package ru.lilitweb.books.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
-import ru.lilitweb.books.dao.Entity;
 
 @Data
 @RequiredArgsConstructor
@@ -13,5 +13,9 @@ public class User implements Entity {
     private int id;
 
     @NonNull
-    private String fullName;
+    private String fullname;
+
+    public User(int id) {
+        this.id = id;
+    }
 }

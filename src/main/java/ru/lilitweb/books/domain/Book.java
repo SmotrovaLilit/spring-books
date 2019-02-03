@@ -1,24 +1,19 @@
 package ru.lilitweb.books.domain;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
-import ru.lilitweb.books.dao.Entity;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
+import javax.persistence.Entity;
 
 @Data
 @RequiredArgsConstructor
 public class Book implements Entity {
     private int id;
-
-    public Book(int id, String title, int year, String description, int authorId) {
-        this.id = id;
-        this.title = title;
-        this.year = year;
-        this.description = description;
-        this.authorId = authorId;
-    }
 
     @NonNull
     private String title;
@@ -29,9 +24,15 @@ public class Book implements Entity {
     @NonNull
     private String description;
 
-    @NonNull
-    private int authorId;
 
+    @ManyToOne
+    @NonNull
     private User author;
-    private List<Genre> genres;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genres = new ArrayList<>();
 }

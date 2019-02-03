@@ -14,8 +14,8 @@ public interface BookDao {
 
     List<Book> getAll();
 
-    List<Book> getAllByGenres(int[] genres);
-    List<Book> getAllByAuthorId(int authorId);
+    List<Book> getAllByGenres(List<Genre> genres);
+    List<Book> getAllByAuthor(User author);
 
     void loadAuthors(List<Book> books, RelatedEntitiesLoader<User> usersLoader);
     void loadGenres(List<Book> books, RelatedEntitiesLoader<Genre> genresLoader);

@@ -2,16 +2,28 @@ package ru.lilitweb.books.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
-import ru.lilitweb.books.dao.Entity;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class Genre implements Entity {
+@NoArgsConstructor
+@Entity
+public class Genre{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NonNull
     private String name;
+
+    public Genre(int id) {
+        this.id = id;
+    }
 }
