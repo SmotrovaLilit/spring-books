@@ -19,12 +19,12 @@ import javax.persistence.Id;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NonNull
     private String fullname;
 
-    public User(int id) {
+    public User(long id) {
         this.id = id;
     }
 }

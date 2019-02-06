@@ -25,7 +25,7 @@ public class BookCrud {
     }
 
     @ShellMethod("Create book")
-    public int bookCreate(Book book) {
+    public long bookCreate(Book book) {
         bookService.add(book);
         return book.getId();
     }

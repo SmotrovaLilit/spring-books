@@ -18,7 +18,7 @@ import javax.persistence.Id;
 public class Genre{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NonNull
     private String name;

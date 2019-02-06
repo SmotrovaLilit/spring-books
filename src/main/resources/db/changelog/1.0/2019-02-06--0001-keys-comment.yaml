@@ -1,0 +1,21 @@
+databaseChangeLog:
+- changeSet:
+    id: 2019-02-06--0001-keys-comment
+    author: smotrova
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: author_id
+        baseTableName: comment
+        constraintName: fk_comment_author
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+    - addForeignKeyConstraint:
+        baseColumnNames: book_id
+        baseTableName: comment
+        constraintName: fk_comment_book
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: book

@@ -3,9 +3,12 @@ package ru.lilitweb.books.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.lilitweb.books.domain.Book;
+import ru.lilitweb.books.domain.Genre;
+import ru.lilitweb.books.domain.User;
 import ru.lilitweb.books.repostory.BookRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -19,24 +22,32 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void add(Book book) {
-        bookRepository.insert(book);
+        bookRepository.save(book);
     }
 
     @Override
     public void update(Book book) {
-        bookRepository.update(book);
+        bookRepository.save(book);
     }
 
     @Override
-    public Book getById(int id) {
-        return bookRepository.getById(id);
+    public Book getById(long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Book> getAllByAuthor(User author) {
+        return bookRepository.findByAuthor(author);
+    }
+
+    @Override
+    public List<Book> getAllByGenres(List<Genre> genres) {
+        return bookRepository.findByGenresIn(genres);
     }
 
     @Override
     public List<Book> getAll() {
-        List<Book> books = bookRepository.getAll();
-
-        return books;
+        return bookRepository.findAll();
     }
 
     @Override

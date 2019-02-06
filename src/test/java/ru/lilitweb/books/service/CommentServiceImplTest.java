@@ -39,7 +39,7 @@ class CommentServiceImplTest {
 
         Comment comment = commentService.addComment(user, book, message);
 
-        verify(repository, atLeastOnce()).insert(new Comment(message, user, book));
+        verify(repository, atLeastOnce()).save(new Comment(message, user, book));
         assertEquals(message, comment.getMessage());
         assertEquals(book.getTitle(), comment.getBook().getTitle());
         assertEquals(user.getFullname(), comment.getAuthor().getFullname());
@@ -52,7 +52,7 @@ class CommentServiceImplTest {
                 2019,
                 "Описание",
                 new User("some book author"));
-        when(repository.getAllByBook(book)).thenReturn(Arrays.asList(new Comment("some message", new User(), new Book())));
+        when(repository.findByBook(book)).thenReturn(Arrays.asList(new Comment("some message", new User(), new Book())));
         List<Comment> comments = commentService.bookComments(book);
         assertEquals("some message", comments.get(0).getMessage());
     }
