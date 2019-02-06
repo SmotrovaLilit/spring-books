@@ -26,7 +26,7 @@ public class BookDaoJdbc implements BookDao {
 
     private final HasOneRelation<Book, User> authorsRelation =
             HasOneRelation.<Book, User>builder()
-                    .foreignKeyGetter(Book::getAuthorId)
+                    .foreignKeyGetter(book -> book.getAuthor().getId())
                     .relationSetter(Book::setAuthor)
                     .build();
 
@@ -54,12 +54,23 @@ public class BookDaoJdbc implements BookDao {
                 .addValue("title", book.getTitle())
                 .addValue("year", book.getYear())
                 .addValue("description", book.getDescription())
-                .addValue("author_id", book.getAuthorId());
+                .addValue("author_id", book.getAuthor().getId());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbc.update("insert into book (title, year, description, author_id) values (:title, :year, :description, :author_id)",
                 parameters, keyHolder, new String[]{"id"});
         book.setId(Objects.requireNonNull(keyHolder.getKey()).intValue());
+
+        if (book.getGenres() != null && book.getGenres().size() > 0) {
+            book.getGenres().forEach(genre -> {
+                jdbc.update(
+                        "insert into book_genre (book_id, genre_id) values(:bookId, :genreId)",
+                        new MapSqlParameterSource()
+                                .addValue("bookId", book.getId())
+                                .addValue("genreId", genre.getId())
+                );
+            });
+        }
     }
 
     @Override
@@ -69,12 +80,35 @@ public class BookDaoJdbc implements BookDao {
         params.put("title", book.getTitle());
         params.put("year", book.getYear());
         params.put("description", book.getDescription());
-        params.put("author_id", book.getAuthorId());
+        params.put("author_id", book.getAuthor().getId());
         jdbc.update("update book set title=:title, year=:year, description=:description, author_id=:author_id where id=:id", params);
+        if (book.getGenres() != null && book.getGenres().size() > 0) {
+            book.getGenres().forEach(genre -> {
+                jdbc.update(
+                        "INSERT INTO book_genre (book_id, genre_id) SELECT :bookId, :genreId FROM DUAL WHERE NOT EXISTS (SELECT * FROM book_genre WHERE book_id = :bookId AND genre_id = :genreId)",
+                        new MapSqlParameterSource()
+                                .addValue("bookId", book.getId())
+                                .addValue("genreId", genre.getId())
+                );
+            });
+            jdbc.update(
+                    "DELETE from book_genre where book_id=:bookId and not(genre_id in (:genres))",
+                    new MapSqlParameterSource()
+                            .addValue("bookId", book.getId())
+                            .addValue("genres", book.getGenres()
+                                    .stream()
+                                    .mapToLong(Genre::getId)
+                                    .boxed()
+                                    .map(String::valueOf)
+                                    .collect(Collectors.toList())
+                            )
+            );
+
+        }
     }
 
     @Override
-    public Book getById(int id) {
+    public Book getById(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject("select * from book where id = :id", params, new BookMapper());
@@ -96,7 +130,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public List<Book> getAllByGenres(int[] genres) {
+    public List<Book> getAllByGenres(long[] genres) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("genres", Arrays.stream(genres)
                 .boxed()
@@ -108,7 +142,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public List<Book> getAllByAuthorId(int authorId) {
+    public List<Book> getAllByAuthorId(long authorId) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("author_id", authorId);
 
@@ -116,7 +150,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         jdbc.update("delete from book where id=:id", params);
@@ -131,7 +165,7 @@ public class BookDaoJdbc implements BookDao {
             int authorId = resultSet.getInt("author_id");
             String title = resultSet.getString("title");
             String description = resultSet.getString("description");
-            return new Book(id, title, year, description, authorId);
+            return new Book(id, title, year, description, new User(authorId));
         }
     }
 }

@@ -10,8 +10,12 @@ import ru.lilitweb.books.dao.Entity;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class User implements Entity {
-    private int id;
+    private long id;
 
     @NonNull
     private String fullName;
+
+    public User(long id) {
+        this.id = id;
+    }
 }

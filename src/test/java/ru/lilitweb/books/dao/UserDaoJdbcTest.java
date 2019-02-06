@@ -31,7 +31,10 @@ public class UserDaoJdbcTest {
     JdbcTemplate jdbcTemplate;
 
     @Test
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/userDaoJdbc/beforeTestingCount.sql")
+    @SqlGroup({
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/userDaoJdbc/resetTeble.sql"),
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/userDaoJdbc/beforeTestingCount.sql")
+    })
     public void count() {
         userDao.count();
         assertEquals(2, userDao.count());

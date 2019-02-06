@@ -44,7 +44,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public Genre getById(int id) {
+    public Genre getById(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject("select * from genre where id=:id", params, new GenreDaoJdbc.GenreMapper());
@@ -56,7 +56,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public List<Genre> getByIds(List<Integer> ids) {
+    public List<Genre> getByIds(List<Long> ids) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("ids", ids);
         return jdbc.query("select * from genre where id in (:ids)", params, new GenreDaoJdbc.GenreMapper());
@@ -73,7 +73,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         jdbc.update("delete from genre where id=:id", params);

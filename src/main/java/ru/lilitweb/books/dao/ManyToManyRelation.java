@@ -23,7 +23,7 @@ public class ManyToManyRelation<E extends Entity, R extends Entity> {
     public void load(List<E> entities, NamedParameterJdbcTemplate jdbc, RelatedEntitiesLoader<R> relatedEntitiesLoader) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("ids", entities.stream().
-                mapToInt(Entity::getId).
+                mapToLong(Entity::getId).
                 distinct().
                 boxed().
                 collect(Collectors.toList()));
@@ -33,20 +33,20 @@ public class ManyToManyRelation<E extends Entity, R extends Entity> {
                 params,
                 new Mapper(foreignKey, otherKey));
 
-        List<Integer> relatedIds = rows.stream().map(row -> row.otherKey).collect(Collectors.toList());
+        List<Long> relatedIds = rows.stream().map(row -> row.otherKey).collect(Collectors.toList());
         List<R> relatedEntities = new ArrayList<>();
         if (relatedIds.size() > 0) {
             relatedEntities = relatedEntitiesLoader.getByIds(relatedIds);
         }
 
-        HashMap<Integer, Set<Integer>> foreignToOtherMap = new HashMap<>();
+        HashMap<Long, Set<Long>> foreignToOtherMap = new HashMap<>();
         rows.forEach(row -> {
             if (foreignToOtherMap.containsKey(row.foreignKey)) {
                 foreignToOtherMap.get(row.foreignKey).add(row.otherKey);
                 return;
             }
 
-            HashSet<Integer> s = new HashSet<>();
+            HashSet<Long> s = new HashSet<>();
             s.add(row.otherKey);
             foreignToOtherMap.put(row.foreignKey, s);
         });
@@ -63,8 +63,8 @@ public class ManyToManyRelation<E extends Entity, R extends Entity> {
     @AllArgsConstructor
     @Data
     private static class Row {
-        Integer foreignKey;
-        Integer otherKey;
+        Long foreignKey;
+        Long otherKey;
     }
 
     @AllArgsConstructor
@@ -75,8 +75,8 @@ public class ManyToManyRelation<E extends Entity, R extends Entity> {
         @Override
         public Row mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Row(
-                    resultSet.getInt(this.foreignKey),
-                    resultSet.getInt(this.otherKey)
+                    resultSet.getLong(this.foreignKey),
+                    resultSet.getLong(this.otherKey)
             );
         }
     }

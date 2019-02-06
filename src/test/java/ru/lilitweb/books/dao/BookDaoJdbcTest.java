@@ -12,7 +12,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
 import ru.lilitweb.books.domain.Book;
-import ru.lilitweb.books.domain.Genre;
 import ru.lilitweb.books.domain.User;
 
 import java.util.ArrayList;
@@ -51,7 +50,8 @@ public class BookDaoJdbcTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                1);
+                new User(1));
+        book.setGenres(Arrays.asList(genreDao.getById(1)));
         bookDao.insert(book);
 
         int countRecords = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book", String.format(
@@ -60,11 +60,15 @@ public class BookDaoJdbcTest {
                 book.getTitle(),
                 book.getYear(),
                 book.getDescription(),
-                book.getAuthorId()
+                book.getAuthor().getId()
         ));
 
         assertTrue(book.getId() > 0);
         assertEquals(1, countRecords);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book_genre", String.format(
+                "book_id=%d",
+                book.getId()
+        )));
     }
 
     @Test
@@ -74,6 +78,7 @@ public class BookDaoJdbcTest {
         book.setTitle("new title");
         book.setDescription("new description");
         book.setYear(book.getYear() + 1);
+        book.setGenres(Arrays.asList(genreDao.getById(2)));
         bookDao.update(book);
         int countRecords = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book", String.format(
                 "id=%d and title='%s' and year=%d and description='%s' and author_id='%s'",
@@ -81,10 +86,19 @@ public class BookDaoJdbcTest {
                 book.getTitle(),
                 book.getYear(),
                 book.getDescription(),
-                book.getAuthorId()
+                book.getAuthor().getId()
         ));
 
         assertEquals(1, countRecords);
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book_genre", String.format(
+                "book_id=%d",
+                book.getId()
+        )));
+        assertEquals(1, JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book_genre", String.format(
+                "book_id=%d and genre_id=%d",
+                book.getId(),
+                2
+        )));
     }
 
     @Test
@@ -123,7 +137,7 @@ public class BookDaoJdbcTest {
     @Test
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/bookDaoJdbc/beforeTestingGetAllByGenres.sql")
     public void getAllByGenres() {
-        int[] genres = {1, 2};
+        long[] genres = {1, 2};
         List<Book> books = bookDao.getAllByGenres(genres);
         assertEquals(2, books.size());
 
@@ -149,11 +163,11 @@ public class BookDaoJdbcTest {
                 "Руслан и Людмила",
                 2019,
                 "Описание",
-                1);
+                new User(1));
         books.add(book);
         UserDao userDao = mock(UserDao.class);
 
-        when(userDao.getByIds(Arrays.asList(1))).thenReturn(Arrays.asList(new User(1, "test name")));
+        when(userDao.getByIds(Arrays.asList(1L))).thenReturn(Arrays.asList(new User(1L, "test name")));
         bookDao.loadAuthors(books, userDao);
         assertEquals("test name", book.getAuthor().getFullName());
     }

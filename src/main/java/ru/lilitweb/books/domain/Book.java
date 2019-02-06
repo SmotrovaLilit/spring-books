@@ -10,14 +10,14 @@ import java.util.List;
 @Data
 @RequiredArgsConstructor
 public class Book implements Entity {
-    private int id;
+    private long id;
 
-    public Book(int id, String title, int year, String description, int authorId) {
+    public Book(long id, String title, int year, String description, User author) {
         this.id = id;
         this.title = title;
         this.year = year;
         this.description = description;
-        this.authorId = authorId;
+        this.author = author;
     }
 
     @NonNull
@@ -30,8 +30,7 @@ public class Book implements Entity {
     private String description;
 
     @NonNull
-    private int authorId;
-
     private User author;
+
     private List<Genre> genres;
 }

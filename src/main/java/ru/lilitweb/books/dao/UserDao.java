@@ -8,11 +8,11 @@ public interface UserDao extends RelatedEntitiesLoader<User> {
     int count();
     void insert(User user);
     void update(User user);
-    User getById(int id);
+    User getById(long id);
 
     List<User> getAll();
 
-    void delete(int id);
+    void delete(long id);
 
-    List<User> getByIds(List<Integer> ids);
+    List<User> getByIds(List<Long> ids);
 }

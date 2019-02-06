@@ -45,7 +45,7 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject("select * from user where id=:id", params, new UserDaoJdbc.UserMapper());
@@ -67,14 +67,14 @@ public class UserDaoJdbc implements UserDao {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(long id) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         jdbc.update("delete from user where id=:id", params);
     }
 
     @Override
-    public List<User> getByIds(List<Integer> ids) {
+    public List<User> getByIds(List<Long> ids) {
         final HashMap<String, Object> params = new HashMap<>();
         params.put("ids", ids);
         return jdbc.query("select * from user where id in (:ids)", params, new UserDaoJdbc.UserMapper());

@@ -10,7 +10,7 @@ import ru.lilitweb.books.dao.Entity;
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class Genre implements Entity {
-    private int id;
+    private long id;
 
     @NonNull
     private String name;

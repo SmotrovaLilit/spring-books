@@ -1,1 +1,1 @@
-truncate table genre; alter table genre alter column id restart with 1;
+delete from genre; alter table genre alter column id restart with 1;

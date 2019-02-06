@@ -4,6 +4,7 @@ package ru.lilitweb.books.shell.converter;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ru.lilitweb.books.domain.Book;
+import ru.lilitweb.books.domain.User;
 
 @Component
 public class BookConverter implements Converter<String, Book> {
@@ -20,6 +21,6 @@ public class BookConverter implements Converter<String, Book> {
         String description = data[2];
         int authorId = Integer.parseInt(data[3]);
 
-        return new Book(name, year, description, authorId);
+        return new Book(name, year, description, new User(authorId));
     }
 }

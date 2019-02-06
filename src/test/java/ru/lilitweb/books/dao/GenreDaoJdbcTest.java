@@ -30,7 +30,10 @@ public class GenreDaoJdbcTest {
     JdbcTemplate jdbcTemplate;
 
     @Test
-    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/genreDaoJdbc/beforeTestingCount.sql")
+    @SqlGroup({
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/genreDaoJdbc/resetTeble.sql"),
+            @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/genreDaoJdbc/beforeTestingCount.sql")
+    })
     public void count() {
         genreDao.count();
         assertEquals(2, genreDao.count());

@@ -7,10 +7,10 @@ public interface GenreDao extends RelatedEntitiesLoader<Genre> {
     int count();
     void insert(Genre genre);
     void update(Genre genre);
-    Genre getById(int id);
+    Genre getById(long id);
 
     List<Genre> getAll();
-    List<Genre> getByIds(List<Integer> ids);
+    List<Genre> getByIds(List<Long> ids);
 
-    void delete(int id);
+    void delete(long id);
 }
