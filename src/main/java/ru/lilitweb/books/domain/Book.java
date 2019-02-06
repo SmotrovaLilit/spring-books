@@ -3,6 +3,9 @@ package ru.lilitweb.books.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -29,10 +32,12 @@ public class Book {
     private String description;
 
 
-    @ManyToOne
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne()
     @NonNull
     private User author;
 
+    @Fetch(FetchMode.JOIN)
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "book_genre",
             joinColumns = @JoinColumn(name = "book_id"),
@@ -40,3 +45,4 @@ public class Book {
     )
     private List<Genre> genres = new ArrayList<>();
 }
+

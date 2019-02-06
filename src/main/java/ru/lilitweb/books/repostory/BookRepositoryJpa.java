@@ -38,7 +38,7 @@ public class BookRepositoryJpa implements BookRepository {
     @Override
     public List<Book> getAll() {
         TypedQuery<Book> query = em.createQuery(
-                "select b from Book b",
+                "select b from Book b join fetch b.author left join fetch b.genres",
                 Book.class);
         return query.getResultList();
     }
