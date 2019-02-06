@@ -1,0 +1,39 @@
+databaseChangeLog:
+- changeSet:
+    id: 2019-02-04--0001-keys
+    author: smotrova
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: author_id
+        baseTableName: book
+        constraintName: fk_book_author
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user
+    - addForeignKeyConstraint:
+        baseColumnNames: book_id
+        baseTableName: book_genre
+        constraintName: fk_book_genre_book
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: book
+    - addForeignKeyConstraint:
+        baseColumnNames: genre_id
+        baseTableName: book_genre
+        constraintName: fk_book_genre_genre
+        onDelete: CASCADE
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: genre
+    - createIndex:
+          columns:
+          - column:
+                name: genre_id
+          - column:
+                name: book_id
+          indexName: idx_book_genre
+          tableName: book_genre
+          unique: true
+

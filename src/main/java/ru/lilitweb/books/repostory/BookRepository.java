@@ -9,7 +9,7 @@ import java.util.List;
 public interface BookRepository {
     void insert(Book book);
     void update(Book book);
-    Book getById(int id);
+    Book getById(long id);
 
     List<Book> getAll();
 

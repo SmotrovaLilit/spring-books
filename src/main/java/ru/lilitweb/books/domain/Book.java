@@ -17,7 +17,7 @@ import javax.persistence.Entity;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NonNull
     private String title;

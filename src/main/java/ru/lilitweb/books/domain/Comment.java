@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
 
     @NonNull
     private String message;

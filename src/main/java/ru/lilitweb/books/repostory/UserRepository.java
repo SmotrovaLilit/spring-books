@@ -7,7 +7,7 @@ import java.util.List;
 public interface UserRepository {
     void insert(User user);
     void update(User user);
-    User getById(int id);
+    User getById(long id);
 
     List<User> getAll();
 

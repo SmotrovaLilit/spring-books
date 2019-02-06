@@ -29,7 +29,7 @@ public class GenreRepositoryJpa implements GenreRepository {
     }
 
     @Override
-    public Genre getById(int id) {
+    public Genre getById(long id) {
         return em.find(Genre.class, id);
     }
 

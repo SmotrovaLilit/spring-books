@@ -30,7 +30,7 @@ public class CommentRepositoryJpa implements CommentRepository {
     }
 
     @Override
-    public Comment getById(int id) {
+    public Comment getById(long id) {
         return em.find(Comment.class, id);
     }
 

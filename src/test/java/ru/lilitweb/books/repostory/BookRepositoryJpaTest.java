@@ -12,6 +12,7 @@ import ru.lilitweb.books.domain.Book;
 import ru.lilitweb.books.domain.Genre;
 import ru.lilitweb.books.domain.User;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,6 +44,8 @@ class BookRepositoryJpaTest {
                 2019,
                 "Описание",
                 bookAuthor);
+        List<Genre> genres = Arrays.asList(new Genre(1), new Genre(2));
+        book.setGenres(genres);
         bookRepository.insert(book);
 
         Book foundedBook = entityManager.find(Book.class, book.getId());
@@ -61,6 +64,7 @@ class BookRepositoryJpaTest {
                 2019,
                 "Описание",
                 bookAuthor);
+        book.setGenres(Arrays.asList(new Genre(1)));
         entityManager.persist(book);
         User anotherUser = new User("some name");
         entityManager.persist(anotherUser);
@@ -69,6 +73,10 @@ class BookRepositoryJpaTest {
         book.setDescription("new description");
         book.setYear(book.getYear() + 1);
         book.setAuthor(anotherUser);
+        List<Genre> genres = new ArrayList<>();
+        genres.add(new Genre(1));
+        genres.add(new Genre(2));
+        book.setGenres(genres);
         bookRepository.update(book);
 
         Book foundedBook = entityManager.find(Book.class, book.getId());
@@ -77,6 +85,7 @@ class BookRepositoryJpaTest {
         assertEquals(book.getYear(), foundedBook.getYear());
         assertEquals(book.getDescription(), foundedBook.getDescription());
         assertEquals(book.getAuthor().getId(), foundedBook.getAuthor().getId());
+        assertEquals(2, foundedBook.getGenres().size());
     }
 
     @Test

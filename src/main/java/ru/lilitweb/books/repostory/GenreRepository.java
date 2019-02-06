@@ -7,7 +7,7 @@ import java.util.List;
 public interface GenreRepository {
     void insert(Genre genre);
     void update(Genre genre);
-    Genre getById(int id);
+    Genre getById(long id);
 
     List<Genre> getAll();
 

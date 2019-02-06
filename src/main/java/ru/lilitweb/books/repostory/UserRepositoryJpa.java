@@ -30,7 +30,7 @@ public class UserRepositoryJpa implements UserRepository {
     }
 
     @Override
-    public User getById(int id) {
+    public User getById(long id) {
         return em.find(User.class, id);
     }
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.lilitweb.books.domain.Book;
 import ru.lilitweb.books.repostory.BookRepository;
+import ru.lilitweb.books.repostory.GenreRepository;
 
 import java.util.List;
 
@@ -13,8 +14,8 @@ public class BookServiceImpl implements BookService {
     private BookRepository bookRepository;
 
     @Autowired
-    public BookServiceImpl(BookRepository bookDao) {
-        this.bookRepository = bookDao;
+    public BookServiceImpl(BookRepository  bookRepository, GenreRepository genreRepository) {
+        this.bookRepository = bookRepository;
     }
 
     @Override
