@@ -11,17 +11,17 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.transaction.annotation.Transactional;
 import ru.lilitweb.books.domain.Book;
 import ru.lilitweb.books.domain.User;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @JdbcTest
@@ -51,7 +51,7 @@ public class BookDaoJdbcTest {
                 2019,
                 "Описание",
                 new User(1));
-        book.setGenres(Arrays.asList(genreDao.getById(1)));
+        book.setGenres(Collections.singletonList(genreDao.getById(1)));
         bookDao.insert(book);
 
         int countRecords = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book", String.format(
@@ -78,7 +78,7 @@ public class BookDaoJdbcTest {
         book.setTitle("new title");
         book.setDescription("new description");
         book.setYear(book.getYear() + 1);
-        book.setGenres(Arrays.asList(genreDao.getById(2)));
+        book.setGenres(Collections.singletonList(genreDao.getById(2)));
         bookDao.update(book);
         int countRecords = JdbcTestUtils.countRowsInTableWhere(jdbcTemplate, "book", String.format(
                 "id=%d and title='%s' and year=%d and description='%s' and author_id='%s'",
@@ -126,12 +126,25 @@ public class BookDaoJdbcTest {
 
     @Test
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/bookDaoJdbc/beforeTestingGetAll.sql")
+    @Transactional
     public void getAll() {
         List<Book> books = bookDao.getAll();
         assertEquals(2, books.size());
 
         assertEquals("test book title(1)", books.get(0).getTitle());
         assertEquals("test book description(2)", books.get(1).getDescription());
+    }
+
+    @Test
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/bookDaoJdbc/beforeTestingGetAll.sql")
+    @Transactional
+    public void getAllWithPayloads() {
+        List<Book> books = bookDao.getAllWithGenres();
+        assertEquals(2, books.size());
+
+        assertEquals("test book title(1)", books.get(0).getTitle());
+        assertEquals("test book description(2)", books.get(1).getDescription());
+        assertEquals(2, books.get(1).getGenres().size());
     }
 
     @Test
@@ -156,27 +169,18 @@ public class BookDaoJdbcTest {
     }
 
     @Test
-    public void loadAuthors() {
-        List<Book> books = new ArrayList<>();
-        Book book = new Book(
-                1,
-                "Руслан и Людмила",
-                2019,
-                "Описание",
-                new User(1));
-        books.add(book);
-        UserDao userDao = mock(UserDao.class);
-
-        when(userDao.getByIds(Arrays.asList(1L))).thenReturn(Arrays.asList(new User(1L, "test name")));
-        bookDao.loadAuthors(books, userDao);
-        assertEquals("test name", book.getAuthor().getFullName());
+    @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/bookDaoJdbc/beforeTestingLoadGenres.sql")
+    public void loadGenresFetchModeSelect() {
+        List<Book> books = bookDao.getAll();
+        bookDao.loadGenresFetchModeSelect(books);
+        assertEquals("Поэзия", books.get(0).getGenres().get(0).getName());
     }
 
     @Test
     @Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:db/data/bookDaoJdbc/beforeTestingLoadGenres.sql")
-    public void loadGenres() {
+    public void loadGenresFetchModeSubSelect() {
         List<Book> books = bookDao.getAll();
-        bookDao.loadGenres(books, genreDao);
+        bookDao.loadGenresFetchModeSubSelect(books);
         assertEquals("Поэзия", books.get(0).getGenres().get(0).getName());
     }
 }

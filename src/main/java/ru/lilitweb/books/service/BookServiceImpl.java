@@ -3,26 +3,17 @@ package ru.lilitweb.books.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.lilitweb.books.dao.BookDao;
-import ru.lilitweb.books.dao.GenreDao;
-import ru.lilitweb.books.dao.HasOneRelation;
-import ru.lilitweb.books.dao.UserDao;
 import ru.lilitweb.books.domain.Book;
-import ru.lilitweb.books.domain.User;
-
 import java.util.List;
 
 @Service
 public class BookServiceImpl implements BookService {
 
     private BookDao bookDao;
-    private UserDao userDao;
-    private GenreDao genreDao;
 
     @Autowired
-    public BookServiceImpl(BookDao bookDao, UserDao userDao, GenreDao genreDao) {
+    public BookServiceImpl(BookDao bookDao) {
         this.bookDao = bookDao;
-        this.userDao = userDao;
-        this.genreDao = genreDao;
     }
 
     @Override
@@ -43,10 +34,7 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<Book> getAll() {
         List<Book> books = bookDao.getAll();
-
-        bookDao.loadAuthors(books, userDao);
-        bookDao.loadGenres(books, genreDao);
-
+        bookDao.loadGenresFetchModeSelect(books);
         return books;
     }
 

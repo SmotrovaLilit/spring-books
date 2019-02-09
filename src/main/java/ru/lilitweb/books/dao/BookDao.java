@@ -13,12 +13,13 @@ public interface BookDao {
     Book getById(long id);
 
     List<Book> getAll();
+    List<Book> getAllWithGenres();
 
     List<Book> getAllByGenres(long[] genres);
     List<Book> getAllByAuthorId(long authorId);
 
-    void loadAuthors(List<Book> books, RelatedEntitiesLoader<User> usersLoader);
-    void loadGenres(List<Book> books, RelatedEntitiesLoader<Genre> genresLoader);
+    void loadGenresFetchModeSelect(List<Book> books);
+    void loadGenresFetchModeSubSelect(List<Book> books);
 
     void delete(long id);
 }

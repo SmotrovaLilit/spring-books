@@ -55,13 +55,6 @@ public class GenreDaoJdbc implements GenreDao {
         return jdbc.query("select * from genre", new HashMap<String, Genre>(), new GenreDaoJdbc.GenreMapper());
     }
 
-    @Override
-    public List<Genre> getByIds(List<Long> ids) {
-        final HashMap<String, Object> params = new HashMap<>();
-        params.put("ids", ids);
-        return jdbc.query("select * from genre where id in (:ids)", params, new GenreDaoJdbc.GenreMapper());
-    }
-
     private static class GenreMapper implements RowMapper<Genre> {
 
         @Override

@@ -4,7 +4,7 @@ import ru.lilitweb.books.domain.User;
 
 import java.util.List;
 
-public interface UserDao extends RelatedEntitiesLoader<User> {
+public interface UserDao {
     int count();
     void insert(User user);
     void update(User user);
@@ -13,6 +13,4 @@ public interface UserDao extends RelatedEntitiesLoader<User> {
     List<User> getAll();
 
     void delete(long id);
-
-    List<User> getByIds(List<Long> ids);
 }
