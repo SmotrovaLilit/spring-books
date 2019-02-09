@@ -1,9 +1,6 @@
 spring:
-  liquibase.enabled: true
-  datasource:
-    driver-class-name: "com.mysql.jdbc.Driver"
-    url: "jdbc:mysql://localhost:3306/springbooks?serverTimezone=UTC"
-    username: root
-    password: rostov
-logging.level.org.hibernate.SQL: DEBUG
-logging.level.org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: library

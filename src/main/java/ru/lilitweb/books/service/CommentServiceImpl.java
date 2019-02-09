@@ -7,6 +7,7 @@ import ru.lilitweb.books.domain.Comment;
 import ru.lilitweb.books.domain.User;
 import ru.lilitweb.books.repostory.CommentRepository;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Service
@@ -22,6 +23,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment addComment(User user, Book book, String message) {
         Comment comment = new Comment(message, user, book);
+        commentRepository.save(comment);
+        return comment;
+    }
+
+    @Override
+    public Comment addAnonimComment(@NotNull Book book, String message) {
+        Comment comment = new Comment(message, book);
         commentRepository.save(comment);
         return comment;
     }

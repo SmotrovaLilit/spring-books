@@ -6,6 +6,6 @@ import ru.lilitweb.books.domain.Comment;
 
 import java.util.List;
 
-public interface CommentRepository extends CrudRepository<Comment, Long> {
+public interface CommentRepository extends CrudRepository<Comment, String> {
     List<Comment> findByBook(Book book);
 }

@@ -8,8 +8,7 @@ import org.springframework.lang.NonNull;
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
-public class Genre{
+public class Author {
     @NonNull
-    private String name;
+    private String fullname;
 }
