@@ -7,37 +7,69 @@ import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.table.*;
 import ru.lilitweb.books.domain.Book;
+import ru.lilitweb.books.domain.Comment;
+import ru.lilitweb.books.domain.User;
 import ru.lilitweb.books.service.BookService;
+import ru.lilitweb.books.service.CommentService;
 import ru.lilitweb.books.service.LocalisationService;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 
 @ShellComponent
 @ShellCommandGroup("Book")
-public class BookCrud {
+public class BookCommands {
     private final LocalisationService localisation;
     private BookService bookService;
+    private CommentService commentService;
 
     @Autowired
-    public BookCrud(LocalisationService localisation, BookService bookService) {
+    public BookCommands(LocalisationService localisation, BookService bookService, CommentService commentService) {
         this.localisation = localisation;
         this.bookService = bookService;
+        this.commentService = commentService;
     }
 
     @ShellMethod("Create book")
-    public long bookCreate(Book book) {
+    public String bookCreate(Book book) {
         bookService.add(book);
         return book.getId();
     }
 
+    @ShellMethod("Book comments")
+    public Table bookComments(@ShellOption String id) {
+        Book book = bookService.getById(id);
+        List<Comment> comments = commentService.bookComments(book);
+        LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
+        headers.put("id", localisation.getMessage("field.comment.id"));
+        headers.put("message", localisation.getMessage("field.comment.message"));
+        headers.put("author", localisation.getMessage("field.comment.author"));
+
+        TableModel table = new BeanListTableModel<>(comments, headers);
+        return new TableBuilder(table)
+                .addFullBorder(BorderStyle.fancy_light_double_dash)
+                .build();
+
+    }
+
+    @ShellMethod("Add comment to book")
+    public String bookAddComment(@ShellOption String id, @ShellOption String message) throws Exception {
+        Book foundedBook = bookService.getById(id);
+        if (foundedBook == null) {
+            throw new Exception();
+        }
+        Comment comment = commentService.addAnonimComment(foundedBook, message);
+        return comment.getId();
+    }
+
     @ShellMethod("Update book")
-    public void bookUpdate(@ShellOption Book book, @ShellOption int id) {
+    public void bookUpdate(@ShellOption Book book, @ShellOption String id) {
         book.setId(id);
         bookService.update(book);
     }
 
     @ShellMethod("Delete book")
-    public void bookDelete(@ShellOption int id) {
+    public void bookDelete(@ShellOption String id) {
         bookService.delete(bookService.getById(id));
     }
 
