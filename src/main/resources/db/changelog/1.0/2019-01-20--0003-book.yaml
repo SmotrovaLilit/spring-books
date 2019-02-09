@@ -1,0 +1,35 @@
+databaseChangeLog:
+- changeSet:
+    id: 2019-01-20--0003-book
+    author: smotrova
+    createTable:
+      tableName: book
+      columns:
+      - column:
+          name: id
+          autoIncrement: true
+          type: "INT UNSIGNED"
+          constraints:
+            nullable: false
+            primaryKey: true
+            primaryKeyName: pk_book
+      - column:
+          name: title
+          type: varchar(255)
+          constraints:
+            nullable: false
+      - column:
+          name: author_id
+          type: "INT UNSIGNED"
+          constraints:
+            nullable: false
+      - column:
+          name: year
+          type: "INT UNSIGNED"
+          constraints:
+            nullable: false
+      - column:
+          name: description
+          type: text
+          constraints:
+            nullable: false
