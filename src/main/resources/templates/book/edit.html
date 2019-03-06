@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title th:text="${bookForm.getTitle()}">Ruslan and Ludminla</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <form method="post" action="edit.html" th:object="${bookForm}" th:action="${'/book/' + id}">
+        <div class="required position-relative row form-group">
+            <label
+                    th:text="#{field.book.title}"
+                    class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-10">
+                <input maxlength="150" name="title"
+                       th:field="*{title}"
+                       th:placeholder="#{field.book.title}"
+                       placeholder="Title" type="text"
+                       class="form-control"
+                       th:classappend="${#fields.hasErrors('title')} ? 'is-invalid' : ''"
+                       value="">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+        </div>
+        <div class="required position-relative row form-group">
+            <label
+                    th:text="#{field.book.author}"
+                    class="col-sm-2 col-form-label">Author</label>
+            <div class="col-sm-10">
+                <input maxlength="100" name="fullname"
+                       th:field="*{author}"
+                       th:placeholder="#{field.book.author}"
+                       placeholder="Author" type="text"
+                       class="form-control"
+                       th:classappend="${#fields.hasErrors('author')} ? 'is-invalid' : ''"
+                       value="">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"></div>
+            </div>
+        </div>
+        <div class="position-relative row form-group">
+            <label
+                    th:text="#{field.book.year}"
+                    class="col-sm-2 col-form-label">Year</label>
+            <div class="col-sm-10">
+                <input name="year" placeholder="Year"
+                       th:placeholder="#{field.book.year}"
+                       th:field="*{year}"
+                       type="number"
+                       class="form-control"
+                       th:classappend="${#fields.hasErrors('year')} ? 'is-invalid' : ''"
+                       value="">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></div>
+            </div>
+        </div>
+        <div class="required position-relative row form-group">
+            <label
+                    th:text="#{field.book.description}"
+                    class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-10">
+                <textarea maxlength="2000" name="description" placeholder="Description"
+                          th:placeholder="#{field.book.description}"
+                          th:field="*{description}"
+                          class="form-control"
+                          th:classappend="${#fields.hasErrors('description')} ? 'is-invalid' : ''"
+                ></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+        </div>
+        <div class="position-relative row form-group">
+            <label
+                    class="col-sm-2 col-form-label"
+                    th:text="#{field.book.genres}">Genre</label>
+            <div class="col-sm-10">
+                <div th:each="itemgenre: ${listgenres}" class="checkbox">
+                    <label><input th:value="${itemgenre}" th:field="*{genres}"
+                                  type="checkbox" name="genres" value=""> <span
+                            th:text="${itemgenre}"> poem</span> </label>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button
+                    th:text="#{button.save}"
+                    class="btn btn-secondary">Save
+            </button>
+        </div>
+    </form>
+</section>
+</body>
+</html>

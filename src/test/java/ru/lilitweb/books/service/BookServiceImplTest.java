@@ -61,7 +61,7 @@ class BookServiceImplTest {
                 new Author("some book author"));
         book.setId("1");
         when(repository.findById("1")).thenReturn(Optional.of(book));
-        Book returnedBook = bookService.getById("1");
+        Book returnedBook = bookService.getById("1").orElse(null);
 
         assertEquals(returnedBook, book);
     }
@@ -118,5 +118,15 @@ class BookServiceImplTest {
                 author);
         bookService.delete(book);
         verify(repository, atLeastOnce()).delete(book);
+    }
+
+    @org.junit.Test
+    public void paginate() throws Exception {
+        throw new Exception();
+    }
+
+    @org.junit.Test
+    public void deleteById() throws Exception {
+        throw new Exception();
     }
 }

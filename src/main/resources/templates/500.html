@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title th:text="#{page.servererror.title}"></title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="error-template">
+                <h1 th:text="#{page.servererror.title}">
+                    We're sorry, but something went wrong.</h1>
+                <div th:text="#{page.servererror.description}"
+                     class="error-details">
+                    We'll take a look at it shortly.
+                </div>
+                <div class="error-actions">
+                    <a href="/" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
+                        <span th:text="#{page.servererror.button_main}">Take Me Home</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

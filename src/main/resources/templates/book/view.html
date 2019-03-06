@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title th:text="${book.getTitle()}">Ruslan and Ludminla</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="card card-body">
+        <div class="card-header"><h5 class="card-title" th:text="${book.getTitle()}">Ruslan and Ludminla</h5></div>
+        <div class="card-body">
+            <div class="card-text">
+                <div>
+                    <span th:text="#{field.book.author} + ':'">Author:</span>
+                    <span th:text="${book.getAuthor().getFullname()}">Pushkin</span>
+                </div>
+                <div><span th:text="#{field.book.year} + ':'">Year:</span>
+                    <span th:text="${book.getYear()}">2012</span>
+                </div>
+                <div th:text="${book.getDescription()}">It tells the story of the abduction of Ludmila, the daughter of
+                    Prince Vladimir of Kiev, by an evil
+                    wizard and the attempt by the brave knight Ruslan to find and rescue her.
+                </div>
+                <span th:each="genre: ${book.getGenres()}"
+                      th:text="${genre.getName()}"
+                      class="badge badge-info mr-1">Info</span>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a
+                    th:href="@{'/book/' + ${book.getId()} + '/edit'}"
+                    href="edit.html">
+                <button
+                        th:text="#{button.edit}"
+                        class="btn btn-primary">Edit</button>
+            </a>
+            <button
+                    th:text="#{button.delete}"
+                    th:data-url="${'/book/' + book.getId()}"
+                    th:data-redirect_url="${'/books/'}"
+                    type="button" class="delete-book ml-2 btn btn-danger">Delete
+            </button>
+        </div>
+    </div>
+</section>
+</body>
+</html>
