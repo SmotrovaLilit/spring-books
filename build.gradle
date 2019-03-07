@@ -32,7 +32,8 @@ dependencies {
     compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect' , version: '2.3.0'
     compile group: 'org.webjars', name: 'bootstrap',  version: '4.0.0'
     compile group: 'org.springframework.shell', name: 'spring-shell-starter', version: '2.0.0.RELEASE'
-    
+    compile group: 'org.hibernate.validator', name: 'hibernate-validator'
+
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.4.0-M1'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params'

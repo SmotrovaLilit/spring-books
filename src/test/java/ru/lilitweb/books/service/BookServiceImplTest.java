@@ -3,6 +3,9 @@ package ru.lilitweb.books.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import ru.lilitweb.books.domain.Author;
 import ru.lilitweb.books.domain.Book;
 import ru.lilitweb.books.domain.Genre;
@@ -120,13 +123,49 @@ class BookServiceImplTest {
         verify(repository, atLeastOnce()).delete(book);
     }
 
-    @org.junit.Test
-    public void paginate() throws Exception {
-        throw new Exception();
+    @Test
+    public void search_ifWithoutSearch() {
+        Author author = new Author("some book author");
+        Book book = new Book(
+                "Руслан и Людмила",
+                2019,
+                "Описание",
+                author);
+        Page<Book> mockPageBook = new PageImpl<Book>(Collections.singletonList(book));
+
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        when(repository.findAll(pageRequest)).thenReturn(mockPageBook);
+        Page<Book> pageBook = bookService.search(Optional.empty(), PageRequest.of(0, 10));
+
+        assertEquals(mockPageBook, pageBook);
+
     }
 
-    @org.junit.Test
+    @Test
+    public void search_ifWithSearch() {
+        Author author = new Author("some book author");
+        Book book = new Book(
+                "Руслан и Людмила",
+                2019,
+                "Описание",
+                author);
+        Page<Book> mockPageBook = new PageImpl<Book>(Collections.singletonList(book));
+        String query = "Руслан";
+        Optional<String> searchValue = Optional.of(query);
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        when(repository
+                .findByTitleContainsOrAuthorFullnameContains(query, query, pageRequest))
+                .thenReturn(mockPageBook);
+        Page<Book> pageBook = bookService.search(searchValue, PageRequest.of(0, 10));
+
+        assertEquals(mockPageBook, pageBook);
+    }
+
+    @Test
     public void deleteById() throws Exception {
-        throw new Exception();
+        Author author = new Author("some book author");
+        String id = "1";
+        bookService.delete(id);
+        verify(repository, atLeastOnce()).deleteById(id);
     }
 }

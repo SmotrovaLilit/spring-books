@@ -3,6 +3,7 @@ package ru.lilitweb.books.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,6 +11,7 @@ import org.springframework.lang.NonNull;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -31,6 +33,9 @@ public class Book {
 
     @NonNull
     private Author author;
+
+    @CreatedDate
+    private Date createdAt;
 
     private List<Genre> genres = new ArrayList<>();
 }
