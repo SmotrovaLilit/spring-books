@@ -11,7 +11,10 @@ import java.util.List;
 
 public interface BookRepository extends PagingAndSortingRepository<Book, String> {
     List<Book> findByGenresIn(List<Genre> genres);
+
     List<Book> findByAuthor(Author author);
+
     List<Book> findAll();
+
     Page<Book> findByTitleContainsOrAuthorFullnameContains(String title, String author, Pageable pageable);
 }

@@ -2,6 +2,7 @@ package ru.lilitweb.books.web.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ import java.util.stream.IntStream;
 
 @Controller
 public class BookController {
+
     private BookService bookService;
 
     public BookController(BookService bookService) {
@@ -38,21 +40,27 @@ public class BookController {
                         HttpServletRequest request,
                         Model model) {
         int pageNumber = page.orElse(1);
+        int countOnPage = 10;
         Page<Book> bookPage = bookService.
-                search(searchValue, PageRequest.of((pageNumber - 1), 10));
-        model.addAttribute("books", bookPage.
-                get().
-                collect(Collectors.toList())
-        );
-        model.addAttribute("bookPage", bookPage);
-        List<Integer> pageNumbers = new ArrayList<>();
+                search(searchValue, PageRequest.of(
+                        (pageNumber - 1),
+                        countOnPage,
+                        Sort.by(Sort.Direction.DESC, "createdAt")
+                ));
 
+
+        List<Integer> pageNumbers = new ArrayList<>();
         if (bookPage.getTotalPages() > 0) {
             pageNumbers = IntStream.rangeClosed(1, bookPage.getTotalPages())
                     .boxed()
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
+        model.addAttribute("books", bookPage.
+                get().
+                collect(Collectors.toList())
+        );
+        model.addAttribute("bookPage", bookPage);
         model.addAttribute("pageNumbers", pageNumbers);
         model.addAttribute("search", searchValue.orElse(""));
         model.addAttribute("currentUrlWithoutPage",
@@ -71,12 +79,12 @@ public class BookController {
 
     @GetMapping("/book/{id}/edit")
     public String edit(@PathVariable String id,
-                       @ModelAttribute("bookForm") @Valid BookForm bookForm,
-                       BindingResult result,
-                       Model model, BookToBookFormConverter converter) {
+                       Model model,
+                       BookToBookFormConverter converter) {
         Book book = bookService.getById(id).orElseThrow(ResourceNotFoundException::new);
-
-        model.addAttribute("bookForm", converter.convert(book));
+        if (!model.containsAttribute("bookForm")) {
+            model.addAttribute("bookForm", converter.convert(book));
+        }
         model.addAttribute("id", id);
         model.addAttribute("listgenres", bookService.getAvailableGenres());
         return "book/edit";
@@ -84,9 +92,9 @@ public class BookController {
 
     @PostMapping("/book/{id}")
     public String update(@PathVariable String id, @ModelAttribute("bookForm") @Valid BookForm bookForm,
-                         BookFormToBookConverter converter,
+                         BindingResult result,
                          RedirectAttributes attr,
-                         BindingResult result) {
+                         BookFormToBookConverter converter) {
         bookService.getById(id).orElseThrow(ResourceNotFoundException::new);
 
         if (result.hasErrors()) {
@@ -101,8 +109,10 @@ public class BookController {
     }
 
     @GetMapping("/book/create")
-    public String create(@ModelAttribute("bookForm") @Valid BookForm bookForm, Model model) {
-        model.addAttribute("bookForm", bookForm);
+    public String create(Model model) {
+        if (!model.containsAttribute("bookForm")) {
+            model.addAttribute("bookForm", new BookForm());
+        }
         model.addAttribute("listgenres", bookService.getAvailableGenres());
         return "book/create";
     }
@@ -119,12 +129,12 @@ public class BookController {
         }
         Book book = bookFormToBookConverter.convert(bookForm);
         bookService.add(book);
-        return "redirect:/book/" + book.getId();
+        return "redirect:/book/" + Objects.requireNonNull(book).getId();
     }
 
-    @DeleteMapping("/book/{id}")
-    public String store(@PathVariable String id) {
+    @DeleteMapping(value = "/book/{id}", produces = "application/json")
+    @ResponseBody
+    public void delete(@PathVariable String id) {
         bookService.delete(id);
-        return "redirect:/books/";
     }
 }

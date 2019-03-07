@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface CommentService {
     Comment addComment(User user, Book book, String message);
-    Comment addAnonimComment(@NotNull  Book book, String message);
+
+    Comment addAnonimComment(@NotNull Book book, String message);
+
     List<Comment> bookComments(Book book);
 }

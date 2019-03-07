@@ -8,7 +8,6 @@ import org.springframework.shell.standard.ShellOption;
 import org.springframework.shell.table.*;
 import ru.lilitweb.books.domain.Book;
 import ru.lilitweb.books.domain.Comment;
-import ru.lilitweb.books.domain.User;
 import ru.lilitweb.books.service.BookService;
 import ru.lilitweb.books.service.CommentService;
 import ru.lilitweb.books.service.LocalisationService;
@@ -37,8 +36,8 @@ public class BookCommands {
     }
 
     @ShellMethod("Book comments")
-    public Table bookComments(@ShellOption String id) {
-        Book book = bookService.getById(id);
+    public Table bookComments(@ShellOption String id) throws Exception {
+        Book book = bookService.getById(id).orElseThrow(Exception::new);
         List<Comment> comments = commentService.bookComments(book);
         LinkedHashMap<String, Object> headers = new LinkedHashMap<>();
         headers.put("id", localisation.getMessage("field.comment.id"));
@@ -54,10 +53,7 @@ public class BookCommands {
 
     @ShellMethod("Add comment to book")
     public String bookAddComment(@ShellOption String id, @ShellOption String message) throws Exception {
-        Book foundedBook = bookService.getById(id);
-        if (foundedBook == null) {
-            throw new Exception();
-        }
+        Book foundedBook = bookService.getById(id).orElseThrow(Exception::new);
         Comment comment = commentService.addAnonimComment(foundedBook, message);
         return comment.getId();
     }
@@ -70,7 +66,7 @@ public class BookCommands {
 
     @ShellMethod("Delete book")
     public void bookDelete(@ShellOption String id) {
-        bookService.delete(bookService.getById(id));
+        bookService.getById(id).ifPresent(b -> bookService.delete(b));
     }
 
     @ShellMethod("List books")
