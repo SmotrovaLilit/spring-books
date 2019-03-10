@@ -17,7 +17,13 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService {
 
     private BookRepository bookRepository;
-    private List<String> genres = Arrays.asList("Poem", "Crime", "Drama", "Horror", "Paranormal romance", "Poetry");
+    private List<Genre> genres = Arrays.asList(
+            new Genre("Poem"),
+            new Genre("Crime"),
+            new Genre("Drama"),
+            new Genre("Horror"),
+            new Genre("Paranormal romance"),
+            new Genre("Poetry"));
 
     @Autowired
     public BookServiceImpl(BookRepository bookDao) {
@@ -55,7 +61,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<String> getAvailableGenres() {
+    public List<Genre> getAvailableGenres() {
         return genres;
     }
 

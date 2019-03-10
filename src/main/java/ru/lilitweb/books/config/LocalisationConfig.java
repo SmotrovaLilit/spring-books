@@ -8,7 +8,7 @@ import ru.lilitweb.books.service.LocalisationService;
 import ru.lilitweb.books.service.LocalisationServiceImpl;
 
 /**
- * Используется для shell
+ * Uses for shell
  */
 @Configuration
 public class LocalisationConfig {

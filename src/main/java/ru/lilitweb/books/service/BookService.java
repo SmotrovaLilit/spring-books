@@ -22,7 +22,7 @@ public interface BookService {
 
     List<Book> getAll();
 
-    List<String> getAvailableGenres();
+    List<Genre> getAvailableGenres();
 
     Page<Book> search(Optional<String> term, Pageable pageable);
 

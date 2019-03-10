@@ -4,5 +4,5 @@ spring:
       host: localhost
       port: 27017
       database: library
-server.port: 8091
+server.port: 8080
 server.error.whitelabel.enabled: false
