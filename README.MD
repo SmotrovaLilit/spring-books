@@ -1,3 +1,15 @@
+# Examples
+
+- Thymeleaf
+- Validation
+- Locale switcher
+- Mongo repository
+- Spring shell
+- WebMvcTest
+- DataMongoTest
+
+
+# Shell commands
 ## Add book
 ```
 book-create --book "Руслан и людмила|2008|Хорошая книга|Пушкин А.С."
