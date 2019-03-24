@@ -5,5 +5,5 @@ import ru.lilitweb.books.domain.User;
 
 import java.util.List;
 
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, String> {
 }

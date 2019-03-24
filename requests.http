@@ -1,0 +1,104 @@
+### Options
+OPTIONS http://localhost:8080/books
+
+### Book list
+GET http://localhost:8080/api/v1/books
+
+### Book list sorted
+GET http://localhost:8080/api/v1/books?sort=asc,createdAt
+
+### Book view
+GET http://localhost:8080/api/v1/book/5c803be45a0f745d98a2abf3
+
+### Head
+HEAD http://localhost:8080/api/v1/book/5c803be45a0f745d98a2abf3
+
+### Book list genres
+GET http://localhost:8080/api/v1/book/genres
+
+### Add book
+POST http://localhost:8080/api/v1/book
+Content-Type: application/json
+
+{
+  "title": "some title",
+  "author": "some author",
+  "year": 2019,
+  "description": "some description",
+  "genres": [
+    "Poem",
+    "Crime"
+  ]
+}
+
+
+### Edit book
+PUT http://localhost:8080/api/v1/book/5c803be45a0f745d98a2abf3
+Content-Type: application/json
+
+{
+  "title": "wstes78",
+  "author": "wstes78",
+  "year": 2018,
+  "description": "some description",
+  "genres": [
+    "Poem",
+    "Crime1"
+  ]
+}
+
+
+### Delete book
+DELETE http://localhost:8080/api/v1/book/1
+Content-Type: application/json
+
+### Error book not found
+GET http://localhost:8080/api/v1/book/5c803be45a0f745d98a2abf3111
+
+### Error book not found
+HEAD http://localhost:8080/api/v1/book/5c803be45a0f745d98a2abf3111
+
+### Book list query parameters convert error
+GET http://localhost:8080/api/v1/books?sort=asdsa
+
+### Book list query parameters validated error
+GET http://localhost:8080/api/v1/books?sort=desc,ifd
+
+
+### Add book Field error
+POST http://localhost:8080/api/v1/book
+Content-Type: application/json
+
+{
+  "title": "",
+  "author": "",
+  "year": 2019,
+  "description": "some description",
+  "genres": [
+    "Poem",
+    "Crime"
+  ]
+}
+
+
+### Error Malformed JSON request
+POST http://localhost:8080/api/v1/book
+Content-Type: application/json
+
+{
+  "title": "some title",
+  "author": "some author",
+  "year": "1234r",
+  "description": "some description",
+  "genres": [
+    "Poem",
+    "Crime"
+  ]
+}
+
+
+
+
+###
+
+
