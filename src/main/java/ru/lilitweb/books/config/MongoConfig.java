@@ -9,8 +9,5 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackages = "ru.lilitweb.books.repostory")
 @EnableMongoAuditing
 public class MongoConfig {
-    static {
-        System.out.println("sdf");
 
-    }
 }
