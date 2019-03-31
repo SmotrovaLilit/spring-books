@@ -141,7 +141,7 @@ public class BookControllerTest {
                 "Описание new",
                 genres);
 
-        this.mvc.perform(MockMvcRequestBuilders.post("/book/create").
+        this.mvc.perform(MockMvcRequestBuilders.post("/book/store").
                 accept(MediaType.TEXT_HTML).
                 param("title", bookForm.getTitle()).
                 param("author", bookForm.getAuthor()).
