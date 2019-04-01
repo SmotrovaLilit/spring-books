@@ -1,0 +1,25 @@
+.page-content {
+    padding-top: 20px;
+}
+
+.form-group.required label:after {
+    content: "*";
+    color: red;
+}
+.lang-switcher{
+
+}
+.lang-switcher__item {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+}
+.lang-switcher__item.lang_ru {
+    background-image: url(../i/ru.svg);
+}
+.lang-switcher__item.lang_en {
+    background-image: url(../i/en.svg);
+}
+.error-template {padding: 40px 15px;text-align: center;}
+.error-actions {margin-top:15px;margin-bottom:15px;}
+.error-actions .btn { margin-right:10px; }

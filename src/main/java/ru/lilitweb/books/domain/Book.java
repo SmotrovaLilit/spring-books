@@ -3,23 +3,24 @@ package ru.lilitweb.books.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.lang.NonNull;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javax.persistence.*;
-import javax.persistence.Entity;
 
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
+@Document(collection = "books")
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
     @NonNull
     private String title;
@@ -30,17 +31,11 @@ public class Book {
     @NonNull
     private String description;
 
-
-    @Fetch(FetchMode.JOIN)
-    @ManyToOne()
     @NonNull
-    private User author;
+    private Author author;
 
-    @Fetch(FetchMode.JOIN)
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "book_genre",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id")
-    )
+    @CreatedDate
+    private Date createdAt;
+
     private List<Genre> genres = new ArrayList<>();
 }

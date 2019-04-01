@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layouts/main}">
+<head>
+    <title>Books</title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div>
+        <a th:text="#{books.button_create_book}"
+           href="/book/create" class="btn btn-outline-success my-2 my-sm-0">Create book</a>
+    </div>
+    <form class="search mt-3" action="">
+        <div class="form-group">
+            <input type="search"
+                   th:value="${search}"
+                   name="search" class="form-control" placeholder="Search"
+                   th:placeholder="#{search.input.placeholder}">
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-6" th:each="book : ${books}">
+            <div class="mt-2 card card-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <img width="100%"
+                             src="https://placeholdit.imgix.net/~text?txtsize=33&amp;txt=IMG&amp;w=100&amp;h=100"
+                             class="card-img">
+                    </div>
+                    <div class="col-sm-10"><h5 class="card-title">
+                        <a
+                                th:href="@{'/book/' + ${book.getId()}}"
+                                th:text="${book.getTitle()}"
+                                href="view.html">Ruslan and Ludminla</a></h5>
+                        <p class="card-text" th:text="${book.getAuthor().getFullname()}">Pushkin</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav class="mt-2" th:if="${bookPage.totalPages > 1}">
+        <ul class="pagination">
+            <li th:each="pageNumber : ${pageNumbers}" class="page-item"
+                th:class="${pageNumber==bookPage.number + 1} ? 'page-item active' : 'page-item'"
+            ><a
+                    th:href="@{${currentUrlWithoutPage}(page=${pageNumber})}"
+                    th:text=${pageNumber}
+                    class="page-link" href="#">1</a></li>
+        </ul>
+    </nav>
+</section>
+</body>
+</html>
